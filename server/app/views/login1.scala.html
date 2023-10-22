@@ -1,10 +1,11 @@
 @* login1 Template File *@
-@()
+@()(implicit request: RequestHeader)
 
 @main("login") {
     
     <form method="get" action="/validateGet1">
         <h2>Login GET</h2>
+        <br>
         Username: <input type="text" name="username"></input>
         <br>
         Password: <input type="password" name="password"></input>
@@ -13,7 +14,9 @@
     </form>
 
     <form method="post" action="@routes.TaskList1.validateLoginPost">
+        @helper.CSRF.formField
         <h2>Login POST</h2>
+        <br>
         Username: <input type="text" name="username"></input>
         <br>
         Password: <input type="password" name="password"></input>
@@ -22,7 +25,9 @@
     </form>
 
     <form method="post" action="@routes.TaskList1.createUser">
+        @helper.CSRF.formField
         <h2>Create User</h2>
+        <br>
         Username: <input type="text" name="username"></input>
         <br>
         Password: <input type="password" name="password"></input>
