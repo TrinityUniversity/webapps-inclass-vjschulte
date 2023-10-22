@@ -56,4 +56,16 @@ class TaskList1 @Inject()(cc: ControllerComponents) extends AbstractController(c
         Redirect(routes.TaskList1.login).withNewSession
     }
 
+    def addTask = Action { implicit request =>
+        val usernameOption = request.session.get("username")
+        usernameOption.map { username =>
+            val postVals = request.body.asFormUrlEncoded
+            postVals.map { args => 
+                val task = args("newTask").head
+                TaskListInMemoryModel.addTask(username, task);
+                Redirect(routes.TaskList1.taskList)
+            }.getOrElse(Redirect(routes.TaskList1.taskList))
+        }.getOrElse(Redirect(routes.TaskList1.login))
+    }
+
 }
