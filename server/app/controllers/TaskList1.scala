@@ -39,7 +39,7 @@ class TaskList1 @Inject()(cc: MessagesControllerComponents) extends MessagesAbst
     }
 
     def validateLoginForm = Action { implicit request =>
-        loginForm.bindFromRequest.fold(
+        loginForm.bindFromRequest().fold(
             formWithErrors => BadRequest(views.html.login1(formWithErrors)),
             ld => 
                 if(TaskListInMemoryModel.validateUser(ld.username, ld.password)) {
