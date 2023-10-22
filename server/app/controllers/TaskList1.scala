@@ -1,6 +1,7 @@
 package controllers
 
 import javax.inject._
+import models.TaskListInMemoryModel
 
 import play.api.mvc._
 
@@ -20,13 +21,30 @@ class TaskList1 @Inject()(cc: ControllerComponents) extends AbstractController(c
         postVals.map { args => 
             val username = args("username").head
             val password = args("password").head
-            //play functionality - looks up the route for you if things check out "Reverse Routing"
-            Redirect(routes.TaskList1.taskList)
+            if(TaskListInMemoryModel.validateUser(username, password)) {
+                Redirect(routes.TaskList1.taskList)
+            } else {
+                Redirect(routes.TaskList1.login)
+            }
+        }.getOrElse(Redirect(routes.TaskList1.login))
+    }
+
+    def createUser = Action { request =>
+        val postVals = request.body.asFormUrlEncoded
+        postVals.map { args => 
+            val username = args("username").head
+            val password = args("password").head
+            if(TaskListInMemoryModel.createUser(username, password)) {
+                Redirect(routes.TaskList1.taskList)
+            } else {
+                Redirect(routes.TaskList1.login)
+            }
         }.getOrElse(Redirect(routes.TaskList1.login))
     }
 
     def taskList = Action {
-        val tasks = List("task1","task2","task3","sleep","eat")
+        val username = "Mark"
+        val tasks = TaskListInMemoryModel.getTasks(username)
         Ok(views.html.taskList1(tasks))
     }
 
