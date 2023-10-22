@@ -2,15 +2,23 @@ package controllers
 
 import javax.inject._
 
-import models.TaskListInMemoryModel
-
 import play.api.mvc._
+import play.api.i18n._
+import models.TaskListInMemoryModel
+import play.api.data._
+import play.api.data.Forms._
+
+case class LoginData(username: String, password: String)
 
 @Singleton
-class TaskList1 @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
+class TaskList1 @Inject()(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
+    val loginForm = Form(mapping(
+        "Username" -> text(3, 10),
+        "Password" -> text(8)
+    )(LoginData.apply)(LoginData.unapply))
 
     def login = Action { implicit request => 
-        Ok(views.html.login1())
+        Ok(views.html.login1(loginForm))
     }
 
     def validateLoginGet(username: String, password: String) = Action {
@@ -28,6 +36,18 @@ class TaskList1 @Inject()(cc: ControllerComponents) extends AbstractController(c
                 Redirect(routes.TaskList1.login).flashing("error" -> "Invalid username/password combination.")
             }
         }.getOrElse(Redirect(routes.TaskList1.login))
+    }
+
+    def validateLoginForm = Action { implicit request =>
+        loginForm.bindFromRequest.fold(
+            formWithErrors => BadRequest(views.html.login1(formWithErrors)),
+            ld => 
+                if(TaskListInMemoryModel.validateUser(ld.username, ld.password)) {
+                    Redirect(routes.TaskList1.taskList).withSession("username" -> ld.username)
+                } else {
+                    Redirect(routes.TaskList1.login).flashing("error" -> "Invalid username/password combination.")
+                }
+        )
     }
 
     def createUser = Action { implicit request =>
@@ -79,5 +99,4 @@ class TaskList1 @Inject()(cc: ControllerComponents) extends AbstractController(c
             }.getOrElse(Redirect(routes.TaskList1.taskList))
         }.getOrElse(Redirect(routes.TaskList1.login))
     }
-
 }
