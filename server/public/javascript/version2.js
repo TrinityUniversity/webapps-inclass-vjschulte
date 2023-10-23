@@ -1,8 +1,7 @@
-
-
 $("#contents").load("/login2");
 
 function login() {
+    console.log("inside login")
     const username = $("#loginName").val();
     const password = $("#loginPass").val();
     $("#contents").load("/validate2?username="+username+"&password="+password);
