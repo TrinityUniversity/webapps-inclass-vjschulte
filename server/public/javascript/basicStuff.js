@@ -16,6 +16,3 @@ stringText.onclick = () => {
         randomString.innerHTML = responseText;
     });
 };
-$("#randomStringText").click(function () {
-    $("#random").load("/randomString")
-})
