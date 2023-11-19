@@ -25,6 +25,24 @@ function login() {
     });
 }
 
+function createUser() {
+    const username = document.getElementById("createName").value;
+    const password = document.getElementById("createPass").value;
+    fetch(createRoute, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
+        body: JSON.stringify({ username, password })
+    }).then(res => res.text()).then(data => {
+        if(data) {
+            document.getElementById("login-section").hidden = true;
+            document.getElementById("task-section").hidden = false;
+            loadTasks();
+        } else {
+            //TODO
+        }
+    });
+} 
+
 function loadTasks() {
     const ul = document.getElementById("task-list");
     //clears prior tasks
@@ -62,8 +80,16 @@ function addTask() {
     }).then(res => res.text()).then(data => {
         if(data) {
             loadTasks();
+            document.getElementById("newTask").value = "";
         } else {
             //TODO false - error task 
         }
+    });
+}
+
+function logout() {
+    fetch(logoutRoute).then(res => res.json()).then(tasks => {
+        document.getElementById("login-section").hidden = false;
+        document.getElementById("task-section").hidden = true;
     });
 }
