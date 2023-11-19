@@ -11,9 +11,9 @@ function login() {
     const password = document.getElementById("loginPass").value;
     fetch(validateRoute, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: { username, password }
-    }).then(res => res.json()).then(body => {
+        headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
+        body: JSON.stringify({ username, password })
+    }).then(res => res.text()).then(data => {
         console.log(data);
     });
 }

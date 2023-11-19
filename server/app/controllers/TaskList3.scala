@@ -26,9 +26,8 @@ class TaskList3 @Inject()(cc: ControllerComponents) extends AbstractController(c
                         Ok(Json.toJson(true))
                         .withSession("username" -> ud.username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
                     } else {
-                        Ok(views.html.login2())
+                        Ok(Json.toJson(false))
                     }
-                    Ok("")
                 case e @ JsError (_) => Redirect(routes.TaskList3.load)
             }
         }.getOrElse(Redirect(routes.TaskList3.load))
