@@ -27,12 +27,43 @@ function login() {
 
 function loadTasks() {
     const ul = document.getElementById("task-list");
+    //clears prior tasks
+    ul.innerHTML = "";
     fetch(tasksRoute).then(res => res.json()).then(tasks => {
-        for(const task of tasks) {
+        for(let i = 0; i <tasks.length; ++i) {
+            const task = tasks[i];
             const li = document.createElement("li");
-            const text = document.createTextNode(task);
+            const text = document.createTextNode(tasks[i]);
             li.appendChild(text);
+            li.onclick = e => {
+                fetch(deleteRoute, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
+                    body: JSON.stringify(i)
+                }).then(res => res.text()).then(data => {
+                    if(data) {
+                        loadTasks();
+                    } else {
+                        //TODO false - error 
+                    }
+                });
+            }
             ul.appendChild(li);
+        }
+    });
+}
+
+function addTask() {
+    let task = document.getElementById("newTask").value;
+    fetch(addRoute, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
+        body: JSON.stringify(task)
+    }).then(res => res.text()).then(data => {
+        if(data) {
+            loadTasks();
+        } else {
+            //TODO false - error task 
         }
     });
 }
