@@ -1,3 +1,7 @@
+function fetchPost(route, data, success) {
+    console.log("TODO")
+}
+
 const csrfToken = $("#csrfToken").val();
 const loginRoute = $("#loginRoute").val();
 const validateRoute = $("#validateRoute").val();
