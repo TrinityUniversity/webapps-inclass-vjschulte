@@ -23,8 +23,8 @@ class TaskList2 @Inject()(cc: ControllerComponents) extends AbstractController(c
         val usernameOption = request.session.get("username")
         usernameOption.map { username =>
             Ok(views.html.taskList2(TaskListInMemoryModel.getTasks(username)))
+            .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
         }.getOrElse(Ok(views.html.login2()))
-
     }
 
     def validate = Action { implicit request =>
@@ -47,7 +47,8 @@ class TaskList2 @Inject()(cc: ControllerComponents) extends AbstractController(c
             val username = args("username").head
             val password = args("password").head
             if(TaskListInMemoryModel.createUser(username, password)) {
-                Ok(views.html.taskList2(TaskListInMemoryModel.getTasks(username))).withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
+                Ok(views.html.taskList2(TaskListInMemoryModel.getTasks(username)))
+                .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
             } else {
                 Ok(views.html.login2())
             }
