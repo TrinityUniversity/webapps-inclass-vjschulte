@@ -33,7 +33,8 @@ class TaskList2 @Inject()(cc: ControllerComponents) extends AbstractController(c
             val username = args("username").head
             val password = args("password").head
             if(TaskListInMemoryModel.validateUser(username, password)) {
-            Ok(views.html.taskList2(TaskListInMemoryModel.getTasks(username))).withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
+                Ok(views.html.taskList2(TaskListInMemoryModel.getTasks(username)))
+                .withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
             } else {
                 Ok(views.html.login2())
             }
@@ -46,7 +47,7 @@ class TaskList2 @Inject()(cc: ControllerComponents) extends AbstractController(c
             val username = args("username").head
             val password = args("password").head
             if(TaskListInMemoryModel.createUser(username, password)) {
-            Ok(views.html.taskList2(TaskListInMemoryModel.getTasks(username))).withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
+                Ok(views.html.taskList2(TaskListInMemoryModel.getTasks(username))).withSession("username" -> username, "csrfToken" -> play.filters.csrf.CSRF.getToken.get.value)
             } else {
                 Ok(views.html.login2())
             }
@@ -79,7 +80,7 @@ class TaskList2 @Inject()(cc: ControllerComponents) extends AbstractController(c
     }
 
     def logout = Action {
-        Redirect(routes.TaskList2.login).withNewSession
+        Redirect(routes.TaskList2.load).withNewSession
     }
 
     def generatedJS = Action {
