@@ -33,7 +33,10 @@ class TaskList3 @Inject()(cc: ControllerComponents) extends AbstractController(c
         }.getOrElse(Redirect(routes.TaskList3.load))
     }
 
-    def data = Action {
-        Ok(Json.toJson(Seq("a", "b", "c")))
+    def taskList = Action { implicit request =>
+        val usernameOption = request.session.get("username")
+        usernameOption.map { username =>
+            Ok(Json.toJson(TaskListInMemoryModel.getTasks(username)))
+        }.getOrElse(Ok(Json.toJson(Seq.empty[String])))
     }
 }

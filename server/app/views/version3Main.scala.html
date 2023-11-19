@@ -4,7 +4,7 @@
 @main("Task List (Version 3)") {
     <div id="contents">Version 3</div>
 
-    <div id="login-section">
+    <div id="login-section" >
         <h2>Login</h2>
         <br>
         Username: <input type = "text" id = "loginName">
@@ -37,6 +37,7 @@
 
     <input type="hidden" id="csrfToken" value="@helper.CSRF.getToken.value">
     <input type="hidden" id="validateRoute" value="@routes.TaskList3.validate">
+    <input type="hidden" id="tasksRoute" value="@routes.TaskList3.tasks">
     <input type="hidden" id="createRoute" value="@routes.TaskList2.createUser">
     <input type="hidden" id="addRoute" value="@routes.TaskList2.addTask">
     <input type="hidden" id="deleteRoute" value="@routes.TaskList2.deleteTask">
