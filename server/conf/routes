@@ -36,10 +36,10 @@ GET        /generatedJS                 controllers.TaskList2.generatedJS
 # Routes for version 3
 GET         /load3          controllers.TaskList3.load
 POST        /validate3      controllers.TaskList3.validate
-POST       /create3                      controllers.TaskList3.createUser
+POST        /create3        controllers.TaskList3.createUser
 GET         /taskList3      controllers.TaskList3.taskList
 POST        /addTask3       controllers.TaskList3.addTask
-POST       /deleteTask3                 controllers.TaskList3.deleteTask
+POST        /deleteTask3    controllers.TaskList3.deleteTask
 GET         /logout3        controllers.TaskList3.logout
 
 # Prefix must match `play.assets.urlPrefix`

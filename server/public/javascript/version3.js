@@ -6,6 +6,7 @@ const tasksRoute = document.getElementById("tasksRoute").value;
 const createRoute = document.getElementById("createRoute").value;
 const addRoute = document.getElementById("addRoute").value;
 const deleteRoute = document.getElementById("deleteRoute").value;
+const logoutRoute = document.getElementById("logoutRoute").value;
 
 function login() {
     const username = document.getElementById("loginName").value;
@@ -14,13 +15,15 @@ function login() {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
         body: JSON.stringify({ username, password })
-    }).then(res => res.text()).then(data => {
+    }).then(res => res.json()).then(data => {
         if(data) {
             document.getElementById("login-section").hidden = true;
             document.getElementById("task-section").hidden = false;
+            document.getElementById("login-message").innerHTML = "";
+            document.getElementById("create-message").innerHTML = "";
             loadTasks();
         } else {
-            //TODO
+            document.getElementById("login-message").innerHTML = "Login Failed";
         }
     });
 }
@@ -32,13 +35,15 @@ function createUser() {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
         body: JSON.stringify({ username, password })
-    }).then(res => res.text()).then(data => {
+    }).then(res => res.json()).then(data => {
         if(data) {
             document.getElementById("login-section").hidden = true;
             document.getElementById("task-section").hidden = false;
+            document.getElementById("login-message").innerHTML = "";
+            document.getElementById("create-message").innerHTML = "";
             loadTasks();
         } else {
-            //TODO
+            document.getElementById("create-message").innerHTML = "User Creation Failed";
         }
     });
 } 
@@ -58,11 +63,12 @@ function loadTasks() {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
                     body: JSON.stringify(i)
-                }).then(res => res.text()).then(data => {
+                }).then(res => res.json()).then(data => {
                     if(data) {
                         loadTasks();
+                        document.getElementById("task-message").innerHTML = "";
                     } else {
-                        //TODO false - error 
+                        document.getElementById("task-message").innerHTML = "Failed to Delete Tasks";
                     }
                 });
             }
@@ -77,12 +83,13 @@ function addTask() {
         method: 'POST',
         headers: {'Content-Type': 'application/json', 'Csrf-Token': csrfToken },
         body: JSON.stringify(task)
-    }).then(res => res.text()).then(data => {
+    }).then(res => res.json()).then(data => {
         if(data) {
             loadTasks();
             document.getElementById("newTask").value = "";
+            document.getElementById("task-message").innerHTML = "";
         } else {
-            //TODO false - error task 
+            document.getElementById("task-message").innerHTML = "Failed to Add Task";
         }
     });
 }
